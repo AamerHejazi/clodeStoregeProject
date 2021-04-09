@@ -6,6 +6,13 @@ public class NoteModel {
     private String notedescription;
     private Integer userid;
 
+    public NoteModel(Integer noteid, String notetitle, String notedescription, Integer userid) {
+        this.noteid = noteid;
+        this.notetitle = notetitle;
+        this.notedescription = notedescription;
+        this.userid = userid;
+    }
+
     public Integer getNoteid() {
         return noteid;
     }
@@ -36,5 +43,15 @@ public class NoteModel {
 
     public void setUserid(Integer userid) {
         this.userid = userid;
+    }
+
+    @Override
+    public String toString() {
+        return "NoteModel{" +
+                "noteid=" + noteid +
+                ", notetitle='" + notetitle + '\'' +
+                ", notedescription='" + notedescription + '\'' +
+                ", userid=" + userid +
+                '}';
     }
 }

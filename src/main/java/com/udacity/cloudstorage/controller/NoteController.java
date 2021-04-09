@@ -29,7 +29,10 @@ public class NoteController {
     }
 
     @PostMapping
-    public String postView(Authentication auth, @ModelAttribute("noteModel") NoteModel noteModel, Model model) {
+    public String createNote(Authentication auth,@ModelAttribute("noteModel")  NoteModel noteModel, Model model) {
+
+        System.out.println(noteModel.toString());
+        System.out.println("Inside create home");
 
         UserModel user = userService.getUser(auth.getName());
         noteModel.setUserid(user.getUserid());
@@ -38,29 +41,34 @@ public class NoteController {
         model.addAttribute("notes", this.noteService.getNotes(user.getUserid()));
 //        model.addAttribute("files", this.fileService.getFiles(user.getUserId()));
 //        model.addAttribute("credentials", this.credentialService.getCredentials(user.getUserId()));
-        return "home";
+        return "redirect:/home";
     }
 
-    @DeleteMapping("/delete/{noteId}")
-    public String deleteNote(Authentication auth, @PathVariable(value = "noteId") Integer noteId, Model model) {
-        this.noteService.deleteNote(noteId);
+
+    @PutMapping
+    public String updateNote(@ModelAttribute NoteModel noteModel, Authentication auth, Model model) {
+        System.out.println("I am inside update function");
+        System.out.println(noteModel.getNotedescription());
+        System.out.println(noteModel.getNotetitle());
+        System.out.println(noteModel.getNoteid());
+
         UserModel user = userService.getUser(auth.getName());
-        model.addAttribute("notes", this.noteService.getNotes(user.getUserid()));
-//        model.addAttribute("files", this.fileService.getFiles(user.getUserId()));
-//        model.addAttribute("credentials", this.credentialService.getCredentials(user.getUserId()));
-        return "home";
-    }
-
-    @PostMapping("/update/{noteid}")
-    public String updateNote(Authentication auth, @PathVariable(value = "noteid")  String noteid, Model model,
-                             @ModelAttribute("noteModel") NoteModel noteModel) {
-
+        noteModel.setUserid(user.getUserid());
         this.noteService.updateNote(noteModel);
-        UserModel user = userService.getUser(auth.getName());
         model.addAttribute("notes", this.noteService.getNotes(user.getUserid()));
 //        model.addAttribute("files", this.fileService.getFiles(user.getUserId()));
 //        model.addAttribute("credentials", this.credentialService.getCredentials(user.getUserId()));
-        return "home";
+        return "redirect:/home";
     }
+
+//    @DeleteMapping
+//    public String deleteNote(Authentication auth, Model model) {
+//        //this.noteService.deleteNote(noteId);
+//        UserModel user = userService.getUser(auth.getName());
+//        model.addAttribute("notes", this.noteService.getNotes(user.getUserid()));
+////        model.addAttribute("files", this.fileService.getFiles(user.getUserId()));
+////        model.addAttribute("credentials", this.credentialService.getCredentials(user.getUserId()));
+//        return "home";
+//    }
 
 }

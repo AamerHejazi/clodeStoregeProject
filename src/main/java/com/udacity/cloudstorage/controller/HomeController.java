@@ -27,6 +27,8 @@ public class HomeController {
 
     @GetMapping
     public String getHomePage(Authentication auth, Model model, NoteModel noteModel){
+        System.out.println(noteModel.toString());
+        System.out.println("Inside get home");
         UserModel user = userService.getUser(auth.getName());
         model.addAttribute("notes", noteService.getNotes(user.getUserid()));
 //        model.addAttribute("files",null);

@@ -19,15 +19,18 @@ public class NoteService {
         return noteMapper.getNotes(userId);
     }
 
-    public void addNote(NoteModel note){
-        noteMapper.insertNote(note);
+    public Integer addNote(NoteModel note){
+        System.out.println(note.getNoteid());
+        System.out.println(note.getNotetitle());
+        System.out.println(note.getNotedescription());
+        return noteMapper.insertNote(note);
     }
 
-    public void updateNote(NoteModel noteModel){
-        noteMapper.updateNote(noteModel);
+    public Integer updateNote(NoteModel note){
+       return noteMapper.updateNote(new NoteModel(note.getNoteid(), note.getNotetitle(), note.getNotedescription(), note.getUserid()));
     }
 
-    public void deleteNote(Integer noteId){
-        noteMapper.deleteNote(noteId);
+    public int deleteNote(Integer noteId){
+        return noteMapper.deleteNote(noteId);
     }
 }

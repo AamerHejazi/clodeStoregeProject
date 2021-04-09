@@ -75,8 +75,8 @@
                                         <th style="width: 50%" scope="col">Description</th>
                                     </tr>
                                 </thead>
-                                <tbody >
-                                    <tr th:each="note:${notes}">
+                                <tbody th:each="note:${notes}">
+                                    <tr >
                                         <td>
                                             <button type="button"
                                                     class="btn btn-success"
@@ -84,9 +84,9 @@
                                                     th:note-title="${note.getNotetitle()}"
                                                     th:note-description="${note.getNotetitle()}"
                                                     onclick="showEditNoteModal(
-                                                    getAttribute('note-id'),
-                                                    getAttribute('note-title'),
-                                                    getAttribute('note-description'))"
+                                                    this.getAttribute('note-id'),
+                                                    this.getAttribute('note-title'),
+                                                    this.getAttribute('note-description'))"
                                             >
                                                 Edit
                                             </button>
@@ -147,8 +147,8 @@
                                               th:object="${noteModel}">
                                             <input id="edit-note-id" name="noteId" readonly  >
                                             <div class="form-group">
-                                                <label for="note-title" class="col-form-label">Title</label>
-                                                <label for="edit-note-title"></label><input type="text" name= "noteTitle" class="form-control" id="edit-note-title" maxlength="20" required >
+                                                <label for="edit-note-title">Title</label>
+                                                <input type="text" name= "noteTitle" class="form-control" id="edit-note-title" maxlength="20" required >
                                             </div>
                                             <div class="form-group">
                                                 <label for="note-description" class="col-form-label">Description</label>
@@ -250,6 +250,9 @@
 
             // For editing the note modal
             function showEditNoteModal(noteId, noteTitle, noteDescription) {
+                console.log(noteId);
+                console.log(noteTitle);
+                console.log(noteDescription);
                 $('#note-id').val(noteId ? noteId : '');
                 $('#note-title').val(noteTitle ? noteTitle : '');
                 $('#note-description').val(noteDescription ? noteDescription : '');
