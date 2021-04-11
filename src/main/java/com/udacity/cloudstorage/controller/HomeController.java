@@ -2,12 +2,15 @@ package com.udacity.cloudstorage.controller;
 
 import com.udacity.cloudstorage.model.NoteModel;
 import com.udacity.cloudstorage.model.UserModel;
-import com.udacity.cloudstorage.services.*;
+import com.udacity.cloudstorage.services.CredentialService;
+import com.udacity.cloudstorage.services.FileService;
+import com.udacity.cloudstorage.services.NoteService;
+import com.udacity.cloudstorage.services.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.security.core.Authentication;
 
 @Controller
 @RequestMapping("/home")
@@ -26,9 +29,8 @@ public class HomeController {
     }
 
     @GetMapping
-    public String getHomePage(Authentication auth, Model model, NoteModel noteModel){
-        System.out.println(noteModel.toString());
-        System.out.println("Inside get home");
+    public String getHomePage(Authentication auth, Model model, NoteModel noteModel) {
+
         UserModel user = userService.getUser(auth.getName());
         model.addAttribute("notes", noteService.getNotes(user.getUserid()));
 //        model.addAttribute("files",null);

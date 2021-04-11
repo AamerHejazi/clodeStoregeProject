@@ -26,11 +26,18 @@
         <div class="tab-content" id="nav-tabContent">
 
             <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
-                <div id="success-msg" th:if="${noteSuccess}" class="alert alert-dark" >
-                    <span th:text="${noteSuccess}"></span>
+<!--                <div id="success-msg" th:if="${noteSuccessMessage}" class="alert alert-success center-block alert-dismissible fade show" >-->
+<!--                    <strong>Success!</strong> <span th:text="${noteSuccessMessage}"></span>-->
+<!--                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
+<!--                        <span aria-hidden="true">&times;</span>-->
+<!--                    </button>-->
+<!--                </div>-->
+                <div class="alert alert-success" th:if="${noteSuccessMessage}" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>Success!</strong> <span th:text="${noteSuccessMessage}"></span>
                 </div>
-                <div id="error-msg" th:if="${noteError}" class="alert alert-danger">
-                    <span th:text="${noteError}"></span>
+                <div id="error-msg" th:if="${noteErrorMessage}" class="alert alert-danger">
+                    <span th:text="${noteErrorMessage}"></span>
                 </div>
                 <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()">
                     + Add a New Note
@@ -49,17 +56,17 @@
                         <tr>
                             <td>
                                 <button type="button" class="btn btn-success"
-                                        th:note-title="${note.getNotetitle()}"
-                                        th:note-description="${note.getNotedescription()}"
-                                        th:note-id="${note.getNoteid()}"
+                                        th:note-title="${note.getNoteTitle()}"
+                                        th:note-description="${note.getNoteDescription()}"
+                                        th:note-id="${note.getNoteId()}"
                                         onclick="showEditNoteModal(this.getAttribute('note-id'),
                                                     this.getAttribute('note-title'),
                                                     this.getAttribute('note-description'))"
                                 >Edit</button>
-                                <button type="button" class="btn btn-danger" th:note-id="${note.getNoteid()}" onclick="showDeleteNoteModal(this.getAttribute('note-id'))">Delete</button>
+                                <button type="button" class="btn btn-danger" th:note-id="${note.getNoteId()}" onclick="showDeleteNoteModal(this.getAttribute('note-id'))">Delete</button>
                             </td>
-                            <th th:text="${note.getNotetitle()}" scope="row">Example Note Title</th>
-                            <td th:text="${note.getNotedescription()}">Example Note Description </td>
+                            <th th:text="${note.getNoteTitle()}" scope="row">Example Note Title</th>
+                            <td th:text="${note.getNoteDescription()}">Example Note Description </td>
                         </tr>
                         </tbody>
                     </table>
@@ -99,14 +106,17 @@
                             </div>
                             <div class="modal-body">
                                 <form action="#" th:action="@{/notes}" th:method="PUT">
+                                    <!-- the name of attribute should be same name inside the module\ -->
                                     <input type="hidden" name="noteId" id="edit-note-id">
                                     <div class="form-group">
                                         <label for="edit-note-title" class="col-form-label">Title</label>
-                                        <input type="text" name= "title" class="form-control" id="edit-note-title" maxlength="20" required>
+                                        <!-- the name of attribute should be same name inside the module\ -->
+                                        <input type="text" name= "noteTitle" class="form-control" id="edit-note-title" maxlength="20" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="edit-note-description" class="col-form-label">Description</label>
-                                        <textarea class="form-control" name="description" id="edit-note-description" rows="5" maxlength="1000" required></textarea>
+                                            <!--the name of attribute should be same name inside the module\ -->
+                                        <textarea class="form-control" name="noteDescription" id="edit-note-description" rows="5" maxlength="1000" required></textarea>
                                     </div>
                                     <button id="editNoteSubmit" type="submit" class="d-none"></button>
                                 </form>
@@ -130,14 +140,17 @@
                             </div>
                             <div class="modal-body">
                                 <form action="#" th:action="@{/notes}" method="POST">
+                                    <!-- the name of attribute should be same name inside the module\ -->
                                     <input type="hidden" name="noteId" id="note-id">
                                     <div class="form-group">
                                         <label for="note-title" class="col-form-label">Title</label>
-                                        <input type="text" name= "title" class="form-control" id="note-title" maxlength="20" required>
+                                        <!-- the name of attribute should be same name inside the module\ -->
+                                        <input type="text" name= "noteTitle" class="form-control" id="note-title" maxlength="20" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="note-description" class="col-form-label">Description</label>
-                                        <textarea class="form-control" name="description" id="note-description" rows="5" maxlength="1000" required></textarea>
+                                        <!-- the name of attribute should be same name inside the module\ -->
+                                        <textarea class="form-control" name="noteDescription" id="note-description" rows="5" maxlength="1000" required></textarea>
                                     </div>
                                     <button id="noteSubmit" type="submit" class="d-none"></button>
                                 </form>
@@ -191,6 +204,12 @@
         $('#credential-password').val(password ? password : '');
         $('#credentialModal').modal('show');
     }
+
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove();
+        });
+    }, 2000);
 </script>
 </body>
 </html>
