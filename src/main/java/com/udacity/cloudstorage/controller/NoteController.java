@@ -17,17 +17,13 @@ public class NoteController {
 
     private final NoteService noteService;
     private final UserService userService;
-    private final FileService fileService;
-    private final CredentialService credentialService;
     private String noteSuccessMessage;
     private String noteErrorMessage;
+    private Integer insertedNote;
 
-    public NoteController(NoteService noteService, UserService userService, FileService fileService, CredentialService credentialService) {
-
+    public NoteController(NoteService noteService, UserService userService) {
         this.noteService = noteService;
         this.userService = userService;
-        this.fileService = fileService;
-        this.credentialService = credentialService;
     }
 
     @PostMapping
@@ -35,7 +31,7 @@ public class NoteController {
 
         UserModel user = userService.getUser(auth.getName());
         noteModel.setUserId(user.getUserid());
-        Integer insertedNote = noteService.addNote(noteModel);
+        insertedNote = noteService.addNote(noteModel);
 
         if (insertedNote > 0) {
             this.noteSuccessMessage = "New note added successfully";
