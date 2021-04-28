@@ -32,7 +32,7 @@ public class HomeController {
         UserModel user = userService.getUser(auth.getName());
         model.addAttribute("encryptionService", encryptionService);
         model.addAttribute("notes", noteService.getNotes(user.getUserid()));
-        //model.addAttribute("files",null);
+        model.addAttribute("files",fileService.getAllFiles(user.getUserid()));
         model.addAttribute("userCredentials",credentialService.getCredentials(user.getUserid()));
         return "home";
     }
