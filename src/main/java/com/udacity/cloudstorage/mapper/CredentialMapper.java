@@ -9,16 +9,16 @@ import java.util.List;
 public interface CredentialMapper {
 
     @Select("SELECT * FROM CREDENTIALS WHERE userid = #{userid}")
-    List<CredentialMapper> getCredentials(Integer userid);
+    public List<CredentialsModel> getCredentials(Integer userid);
 
     @Insert("INSERT INTO CREDENTIALS (url, username, key, password, userid) VALUES(#{url}, #{username}, #{key}, #{password}, #{userid})")
-    @Options(useGeneratedKeys = true, keyProperty = "credentialid")
-    Integer insert(CredentialsModel credentialsModel);
+    @Options(useGeneratedKeys = true, keyProperty = "credentialid" ,keyColumn="credentialid")
+    public Integer insertCredential(CredentialsModel credentialsModel);
 
     @Delete("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialid}")
-    Integer deleteNote(Integer credentialid);
+    public Integer deleteCredential(Integer credentialid);
 
-    @Update("Update CREDENTIALS SET username=#{username}, password=#{password} WHERE credentialid = #{credentialid}")
-    Integer updateNote(CredentialsModel credentialsModel, Integer credentialid);
+    @Update("Update CREDENTIALS SET username=#{username}, password=#{password}, key=#{key}, url=#{url} WHERE credentialid = #{credentialid}")
+    public Integer updateCredential(CredentialsModel credentialsModel);
 
 }
