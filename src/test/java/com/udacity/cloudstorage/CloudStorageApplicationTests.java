@@ -33,6 +33,7 @@ class CloudStorageApplicationTests {
 	@BeforeEach
 	public void beforeEach() {
 		driver = new ChromeDriver();
+		driver.manage().timeouts().implicitlyWait(30,TimeUnit.SECONDS);
 		credentialsTest = new CredentialsTest(driver);
 		loginPageTest = new LoginPageTest(driver);
 		notesTest = new NotesTest(driver);
@@ -96,7 +97,7 @@ class CloudStorageApplicationTests {
 	@Test																									 //
 	public void signup(){																					 //
 		driver.get(baseURL + "/signup");																	 //
-		signupPageTest.createUserName(port);																 //
+		signupPageTest.createUserName();																 //
 		Assertions.assertEquals("You successfully signed up! Please continue to the login page.",
 				signupPageTest.getSuccessMessage());														 //
 	}																										 //

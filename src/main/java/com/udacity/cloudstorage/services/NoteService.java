@@ -4,6 +4,7 @@ import com.udacity.cloudstorage.mapper.NoteMapper;
 import com.udacity.cloudstorage.model.NoteModel;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -19,10 +20,11 @@ public class NoteService {
         return noteMapper.getNotes(userId);
     }
 
+    public boolean isNoteAvailable(Integer userId, String noteTitle, String noteDescription){
+        return noteMapper.getOneNote(userId, noteTitle, noteDescription) == null;
+    }
+
     public Integer addNote(NoteModel note){
-        System.out.println(note.getNoteId());
-        System.out.println(note.getNoteTitle());
-        System.out.println(note.getNoteDescription());
         return noteMapper.insertNote(note);
     }
 

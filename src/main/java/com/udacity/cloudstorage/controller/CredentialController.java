@@ -17,7 +17,7 @@ public class CredentialController {
     private final UserService userService;
     private String credentialSuccessMessage;
     private String credentialErrorMessage;
-
+    private Integer insertedCredential;
 
     public CredentialController(CredentialService credentialService, UserService userService) {
         this.credentialService = credentialService;
@@ -29,13 +29,20 @@ public class CredentialController {
 
         UserModel user = userService.getUser(auth.getName());
         credentialsModel.setUserid(user.getUserid());
-        Integer insertedCredential = credentialService.addCredential(credentialsModel);
 
+        if(credentialService.isCredentialAvailable(user.getUserid(), credentialsModel.getUrl(), credentialsModel.getUsername())) {
+            insertedCredential = credentialService.addCredential(credentialsModel);
+        }else {
+            insertedCredential = -1;
+            this.credentialErrorMessage = "This url already exist with same username";
+        }
         if (insertedCredential > 0) {
             this.credentialSuccessMessage = "New credential added successfully";
             redirectAttributes.addFlashAttribute("credSuccessMessage", this.credentialSuccessMessage);
         } else {
-            this.credentialErrorMessage = "An error occurred while adding a credential";
+            if(this.credentialErrorMessage == null){
+                this.credentialErrorMessage = "An error occurred while adding a credential";
+            }
             redirectAttributes.addFlashAttribute("credErrorMessage", this.credentialErrorMessage);
         }
 

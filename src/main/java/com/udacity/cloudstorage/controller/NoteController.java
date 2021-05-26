@@ -2,14 +2,14 @@ package com.udacity.cloudstorage.controller;
 
 import com.udacity.cloudstorage.model.NoteModel;
 import com.udacity.cloudstorage.model.UserModel;
-import com.udacity.cloudstorage.services.CredentialService;
-import com.udacity.cloudstorage.services.FileService;
 import com.udacity.cloudstorage.services.NoteService;
 import com.udacity.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.sql.SQLException;
 
 @Controller
 @RequestMapping("/notes")
@@ -27,19 +27,35 @@ public class NoteController {
     }
 
     @PostMapping
-    public String createNote(Authentication auth, @ModelAttribute NoteModel noteModel, RedirectAttributes redirectAttributes) {
+    public String createNote(Authentication auth, @ModelAttribute NoteModel noteModel, RedirectAttributes redirectAttributes) throws SQLException {
 
         UserModel user = userService.getUser(auth.getName());
         noteModel.setUserId(user.getUserid());
-        insertedNote = noteService.addNote(noteModel);
 
-        if (insertedNote > 0) {
-            this.noteSuccessMessage = "New note added successfully";
-            // model.addAttribute("noteSuccessMessage" , this.noteSuccessMessage);
-            redirectAttributes.addFlashAttribute("noteSuccessMessage", this.noteSuccessMessage);
-        } else {
-            this.noteErrorMessage = "An error occurred while adding a note";
-            redirectAttributes.addFlashAttribute("noteErrorMessage", this.noteErrorMessage);
+        try {
+            if(noteService.isNoteAvailable(user.getUserid(), noteModel.getNoteTitle(), noteModel.getNoteDescription())){
+                insertedNote = noteService.addNote(noteModel);
+            }else {
+                insertedNote = -1;
+                this.noteErrorMessage = "Note already exist";
+            }
+
+
+        } catch (Exception e) {
+            e.getLocalizedMessage();
+            insertedNote = -1;
+            this.noteErrorMessage = "Note description exceed 1000 characters";
+        } finally {
+            if (insertedNote > 0) {
+                this.noteSuccessMessage = "New note added successfully";
+                // model.addAttribute("noteSuccessMessage" , this.noteSuccessMessage);
+                redirectAttributes.addFlashAttribute("noteSuccessMessage", this.noteSuccessMessage);
+            } else {
+                if (this.noteErrorMessage == null) {
+                    this.noteErrorMessage = "An error occurred while adding a note";
+                }
+                redirectAttributes.addFlashAttribute("noteErrorMessage", this.noteErrorMessage);
+            }
         }
 
         return "redirect:/home";

@@ -28,6 +28,10 @@ public class CredentialService {
         return credentialMapper.getCredentials(userId);
     }
 
+    public boolean isCredentialAvailable(Integer userId, String url , String username){
+        return credentialMapper.getOneCredential(userId, url, username) == null;
+    }
+
     public Integer addCredential(CredentialsModel credential){
         random = generateRandomNumber(biggest, smallest);
         encryptedPass = encryptionService.encryptValue(credential.getPassword(), String.valueOf(random));

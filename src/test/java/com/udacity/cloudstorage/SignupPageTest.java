@@ -56,17 +56,19 @@ public class SignupPageTest {
         return successMsg;
     }
 
-    public void createUserName(Integer userNumber){
-        this.getInputFirstName().sendKeys("Mohammed");
-        this.getInputLastName().sendKeys("Ahmed");
-        System.out.println("amer"+userNumber);
-        this.getInputUsername().sendKeys("amer"+userNumber);
-        this.getInputPassword().sendKeys("123321");
+    public void createUserName(){
+        this.getInputFirstName().sendKeys("Amer");
+        this.getInputLastName().sendKeys("Hijazi");
+        this.getInputUsername().sendKeys("ahijazi");
+        this.getInputPassword().sendKeys("332120741");
         this.getSubmitButton().click();
 
     }
 
     public String getSuccessMessage(){
-        return getSuccessMsg().getText();
+        if (getSuccessMsg().getText() != null) {
+            return getSuccessMsg().getText();
+        }
+        return "false";
     }
 }
